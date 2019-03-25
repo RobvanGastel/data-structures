@@ -1,1 +1,1 @@
-# data-structures-go
+# data-structures

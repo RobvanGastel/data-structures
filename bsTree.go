@@ -38,6 +38,56 @@ func TreeInsert(T *Tree, z *Node) {
 	}
 }
 
+func TreeSearch(x *Node, k int) *Node {
+	if x == nil || k == x.key {
+		return x
+	}
+	if k < x.key {
+		return TreeSearch(x.left, k)
+	} else {
+		return TreeSearch(x.right, k)
+	}
+}
+
+func Transplant(T *Tree, u, v *Node) {
+	if u.parent == nil {
+		T.root = v
+	} else if u == u.parent.left {
+		u.parent.left = v
+	} else {
+		u.parent.right = v
+	}
+
+	if v != nil {
+		v.parent = u.parent
+	}
+}
+
+func TreeMinimum(x *Node) *Node {
+	for x.left != nil {
+		x = x.left
+	}
+	return x
+}
+
+func TreeDelete(T *Tree, z *Node) {
+	if z.left == nil {
+		Transplant(T, z, z.right)
+	} else if z.right == nil {
+		Transplant(T, z, z.right)
+	} else {
+		y := TreeMinimum(z.right)
+		if y.parent != z {
+			Transplant(T, y, y.right)
+			y.right = z.right
+			y.right.parent = y
+		}
+		Transplant(T, z, y)
+		y.left = z.left
+		y.left.parent = y
+	}
+}
+
 func InOrderTreeWalk(x *Node) {
 	if x != nil {
 		InOrderTreeWalk(x.left)
@@ -45,6 +95,7 @@ func InOrderTreeWalk(x *Node) {
 		InOrderTreeWalk(x.right)
 	}
 }
+
 
 func InitBinarySearchTree(T *Tree) {	
 	TreeInsert(T, &Node{key: 10})
@@ -56,10 +107,13 @@ func InitBinarySearchTree(T *Tree) {
 	TreeInsert(T, &Node{key: 9})
 }
 
-
 func main() {
 	T := &Tree{}
-	
 	InitBinarySearchTree(T)
+	InOrderTreeWalk(T.root)
+
+	x := TreeSearch(T.root, 9)
+	TreeDelete(T, x)
+
 	InOrderTreeWalk(T.root)
 }

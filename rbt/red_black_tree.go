@@ -2,6 +2,8 @@ package rbt
 
 import "fmt"
 
+// TODO: Implement all dynamic set operations
+
 const (
 	RED = 0
 	BLACK = 1
@@ -18,7 +20,7 @@ type Tree struct {
 }
 
 // TODO: Translate to Red Black tree insert
-func TreeInsert(T *Tree, z *Node) {
+func (T *Tree) InsertNode(z *Node) {
 	var y *Node
 	var x = T.Root
 	

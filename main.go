@@ -1,31 +1,34 @@
 package main
 
 import (
-	// . "data-structures/rbt"
-	. "data-structures/graph"
-	// "fmt"
+	. "data-structures/bst"
+	"fmt"
 )
 
 // type Tree interface {
 // 	Insert()	
 // }
 
-// func InitTree(T *Tree) {	
-// 	TreeInsert(T, &Node{Key: 10})
-// 	TreeInsert(T, &Node{Key: 8})
-// 	TreeInsert(T, &Node{Key: 12})
-// 	TreeInsert(T, &Node{Key: 6})
-// 	TreeInsert(T, &Node{Key: 14})
-// 	TreeInsert(T, &Node{Key: 4})
-// 	TreeInsert(T, &Node{Key: 9})
-// }
+func InitTree(T *Tree) {	
+	T.InsertNode(&Node{Key: 10})
+	T.InsertNode(&Node{Key: 9})
+	T.InsertNode(&Node{Key: 8})
+	T.InsertNode(&Node{Key: 6})
+	T.InsertNode(&Node{Key: 11})
+	T.InsertNode(&Node{Key: 12})
+	T.InsertNode(&Node{Key: 13})
+	T.InsertNode(&Node{Key: 5})
+	T.InsertNode(&Node{Key: 4})
+}
 
 func main() {
-	// T := &Tree{}
+	T := &Tree{}
+	node := &Node{Key: 4}
+	T.InsertNode(node)
 
-	// InitTree(T)
+	InitTree(T)
 	// InOrderTreeWalk(T.Root)
 
-	g := &Graph{}
-	print(g)
+	var k = T.Predecessor(node)
+	fmt.Println(k)
 }

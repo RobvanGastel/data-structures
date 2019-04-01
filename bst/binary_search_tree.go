@@ -2,11 +2,6 @@ package bst
 
 import "fmt"
 
-const (
-	RED = 0
-	BLACK = 1
-)
-
 type Node struct {
 	Left, Right, Parent *Node
 	Key int
@@ -16,7 +11,7 @@ type Tree struct {
 	Root *Node
 }
 
-func TreeInsert(T *Tree, z *Node) {
+func (T *Tree) InsertNode(z *Node) {
 	var y *Node
 	var x = T.Root
 	
@@ -38,18 +33,7 @@ func TreeInsert(T *Tree, z *Node) {
 	}
 }
 
-func TreeSearch(x *Node, k int) *Node {
-	if x == nil || k == x.Key {
-		return x
-	}
-	if k < x.Key {
-		return TreeSearch(x.Left, k)
-	} else {
-		return TreeSearch(x.Right, k)
-	}
-}
-
-func Transplant(T *Tree, u, v *Node) {
+func (T *Tree) Transplant(u, v *Node) {
 	if u.Parent == nil {
 		T.Root = v
 	} else if u == u.Parent.Left {
@@ -63,30 +47,42 @@ func Transplant(T *Tree, u, v *Node) {
 	}
 }
 
-func TreeMinimum(x *Node) *Node {
+func (T *Tree) Minimum(x *Node) *Node {
 	for x.Left != nil {
 		x = x.Left
 	}
 	return x
 }
 
-func TreeDelete(T *Tree, z *Node) {
+func (T *Tree) TreeDelete(z *Node) {
 	if z.Left == nil {
-		Transplant(T, z, z.Right)
+		T.Transplant(z, z.Right)
 	} else if z.Right == nil {
-		Transplant(T, z, z.Right)
+		T.Transplant(z, z.Right)
 	} else {
-		y := TreeMinimum(z.Right)
+		y := T.Minimum(z.Right)
 		if y.Parent != z {
-			Transplant(T, y, y.Right)
+			T.Transplant(y, y.Right)
 			y.Right = z.Right
 			y.Right.Parent = y
 		}
-		Transplant(T, z, y)
+		T.Transplant(z, y)
 		y.Left = z.Left
 		y.Left.Parent = y
 	}
 }
+
+func TreeSearch(x *Node, k int) *Node {
+	if x == nil || k == x.Key {
+		return x
+	}
+	if k < x.Key {
+		return TreeSearch(x.Left, k)
+	} else {
+		return TreeSearch(x.Right, k)
+	}
+}
+
 
 func InOrderTreeWalk(x *Node) {
 	if x != nil {
@@ -96,12 +92,18 @@ func InOrderTreeWalk(x *Node) {
 	}
 }
 
-func InitBinarySearchTree(T *Tree) {	
-	TreeInsert(T, &Node{Key: 10})
-	TreeInsert(T, &Node{Key: 8})
-	TreeInsert(T, &Node{Key: 12})
-	TreeInsert(T, &Node{Key: 6})
-	TreeInsert(T, &Node{Key: 14})
-	TreeInsert(T, &Node{Key: 4})
-	TreeInsert(T, &Node{Key: 9})
+func PreOrderTreeWalk(x *Node) {
+	if x != nil {
+		fmt.Println(x.Key)
+		PreOrderTreeWalk(x.Left)
+		PreOrderTreeWalk(x.Right)
+	}
+}
+
+func PostOrderTreeWalk(x *Node) {
+	if x != nil {
+		PostOrderTreeWalk(x.Left)
+		PostOrderTreeWalk(x.Right)
+		fmt.Println(x.Key)
+	}
 }

@@ -2,7 +2,6 @@ package heap
 
 import (
 	"math"
-	"fmt"
 )
 
 func Parent(i int) int {
@@ -17,19 +16,35 @@ func Right(i int) int {
 	return 2*i+2
 }
 
-func MaxHeapify() {
-
+func HeapMaximum(A []int) int {
+	return A[1]
 }
 
-func IsMaxHeap(size int) {
-	// for int(math.Ceil(float(size)/2.0)) < 2 {
+func MaxHeapify(A []int, i int) {
+	l := Left(i)
+	r := Right(i)
+	largest := 0
 
-	// }
+	if r <= len(A) && A[l] > A[i] {
+		largest = l
+	} else {
+		largest = i
+	}
+
+	if r<= len(A) && A[r] > A[largest] {
+		largest = r
+	}
+
+	if largest != i {
+		temp := A[largest]
+		A[largest] = A[i]
+		A[i] = temp
+		MaxHeapify(A, i)
+	}
 }
 
-func BuildMaxHeap() {
-	var i = int(math.Ceil(float64(2000)/2.0))
-	for i < 2 {
-		fmt.Println(i)
+func BuildMaxHeap(A []int) {
+	for i := int(math.Floor(float64(len(A)))/2.0); i > 1; i-- {
+		MaxHeapify(A, i)
 	}
 }

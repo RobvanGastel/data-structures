@@ -119,7 +119,6 @@ func TreeSearch(x *Node, k int) *Node {
 	}
 }
 
-
 func InOrderTreeWalk(x *Node) {
 	if x != nil {
 		InOrderTreeWalk(x.Left)

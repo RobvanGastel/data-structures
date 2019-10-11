@@ -3,6 +3,7 @@ package heap
 import (
 	"math"
 	"errors"
+	"fmt"
 )
 
 // TODO: Write tests for heaps
@@ -12,11 +13,11 @@ func Parent(i int) int {
 }
 
 func Left(i int) int {
-	return 2*i+1
+	return 2*i
 }
 
 func Right(i int) int {
-	return 2*i+2
+	return 2*i+1
 }
 
 func HeapMaximum(A []int) int {
@@ -28,13 +29,17 @@ func MaxHeapify(A []int, i int) {
 	r := Right(i)
 	largest := 0
 
-	if r <= len(A) && A[l] > A[i] {
+	fmt.Println(largest)
+	fmt.Println(r)
+	fmt.Println(l)
+
+	if l <= len(A) && A[l] > A[i] {
 		largest = l
 	} else {
 		largest = i
 	}
 
-	if r<= len(A) && A[r] > A[largest] {
+	if r <= len(A) && A[r] > A[largest] {
 		largest = r
 	}
 
@@ -42,12 +47,14 @@ func MaxHeapify(A []int, i int) {
 		temp := A[largest]
 		A[largest] = A[i]
 		A[i] = temp
-		MaxHeapify(A, i)
+		MaxHeapify(A, largest)
 	}
 }
 
 func BuildMaxHeap(A []int) {
-	for i := int(math.Floor(float64(len(A)))/2.0); i > 1; i-- {
+	A_floor := int(math.Floor(float64(len(A)))/2.0)
+	for i := A_floor; i > 1; i-- {
+		fmt.Println(A_floor, i)
 		MaxHeapify(A, i)
 	}
 }

@@ -4,7 +4,6 @@ import (
 	"testing"
 	"math/rand"
 	"reflect"
-	"fmt"
 )
 
 // TODO: Create generic method, Checks if values are equal
@@ -38,8 +37,6 @@ func TestCheckMaxHeap(t *testing.T) {
 		randm := rand.Intn(1000)
 		A = append(A, randm)
 	}
-
-	fmt.Println(len(A))
 	BuildMaxHeap(A) // Build inplace
 
 	valid_heap := true
@@ -47,11 +44,42 @@ func TestCheckMaxHeap(t *testing.T) {
 	for j := 0; j < len(A); j++ {
 		max, _ := HeapExtractMax(A)
 
-		if prev_max < max {
+		if prev_max > max {
 			valid_heap = false
 			break
 		}
 	}
 
     AssertEqual(t, true, valid_heap)
+}
+
+func TestCheckIncreaseKeyEmptyHeap(t *testing.T) {
+	// A := make([]int, 0)
+
+	// // Fill max heap
+	// for i := 0; i < 1000; i++ {
+	// 	randm := rand.Intn(1000)
+	// 	A = append(A, randm)
+	// }
+
+	// fmt.Println(len(A))
+	// BuildMaxHeap(A) // Build inplace
+
+    // AssertEqual(t, true, valid_heap)
+}
+
+func TestCheckIncreaseKey(t *testing.T) {
+	A := make([]int, 0)
+
+	// Fill max heap
+	for i := 0; i < 1000; i++ {
+		randm := rand.Intn(1000)
+		A = append(A, randm)
+	}
+	BuildMaxHeap(A) // Build inplace
+
+	val := 10000
+	errorOrNil := MaxHeapInsert(A, &val)
+
+    AssertEqual(t, nil, errorOrNil)
 }

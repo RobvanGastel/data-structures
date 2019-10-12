@@ -34,7 +34,20 @@ func main() {
 	// fmt.Println(A[Left(0)])
 	// fmt.Println(A[Right(0)])
 
+	// A := make([]int, 0)
+
+	// Fill max heap
+	// for i := 0; i < 1000; i++ {
+	// 	randm := rand.Intn(1000)
+	// 	A = append(A, randm)
+	// }
+	BuildMaxHeap(A) // Build inplace
+
+	val := 10000
+	_ = MaxHeapInsert(A, &val)
 	fmt.Println(A)
-	BuildMaxHeap(A)
-	fmt.Println(A)
+
+	i, _ := HeapExtractMax(A)
+	fmt.Println(i)
+    // AssertEqual(t, nil, errorOrNil)
 }

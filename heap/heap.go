@@ -3,6 +3,7 @@ package heap
 import (
 	"math"
 	"errors"
+	"fmt"
 )
 
 // TODO: Write tests for heaps
@@ -67,19 +68,22 @@ func HeapExtractMax(A []int) (int, error) {
 }
 
 func HeapIncreaseKey(A []int, i *int, key *int) error {
-	j := *i
-	if *key < A[*i] {
+	j := *i-1
+	if *key < A[j] {
 		return errors.New("new key is smaller than current key")
 	}
 
-	A[*i] = *key
+	A[j] = *key
 	for j > 1 && A[Parent(j)] < A[j] {
 		temp := A[Parent(j)]
-		A[Parent(*i)] = A[j]
+		A[Parent(j)] = A[j]
 		A[j] = temp
 
 		j = Parent(j)
 	}
+
+	fmt.Println(A)
+
 	return nil
 }
 

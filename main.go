@@ -6,20 +6,21 @@ import (
 )
 
 func main() {
-	A := []int{30, 20, 15, 10, 5, 3, 25}
+	A := []int{30, 20, 100, 200, 300, 5100, 510, 20, 20, 15, 10, 5, 3, 25}
 
 	BuildMaxHeap(&A) // Build inplace
-	fmt.Println(A)
 
-	val := 10000
-	_ = MaxHeapInsert(&A, &val)
+	prev_max, _ := HeapExtractMax(&A)
 	fmt.Println(A)
-
-	i, _ := HeapExtractMax(&A)
-	fmt.Println(i)
-
-	fmt.Println(A)
-	i, _ = HeapExtractMax(&A)
-	fmt.Println(i)
-	fmt.Println(A)
+	fmt.Println(prev_max)
+	n := len(A)
+	for j := 0; j < n; j++ {
+		max, _ := HeapExtractMax(&A)
+		fmt.Println(max)
+		fmt.Println(j)
+		if prev_max < max {
+			fmt.Println("dsadadad")
+			break
+		}
+	}
 }

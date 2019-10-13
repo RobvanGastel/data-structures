@@ -7,17 +7,20 @@ import (
 
 // Inplace modification of A
 
-func Parent(i int) int {
-	return int(math.Floor(float64(i-1)/2.0))
+func Parent(i int) *int {
+	p := int(math.Floor(float64(i-1)/2.0))
+	return &p
 }
 
 func Left(i *int) *int {
 	l := 2*(*i)
+	l = l + 1
 	return &l
 }
 
 func Right(i *int) *int {
-	r := 2*(*i+1)
+	r := 2*(*i)
+	r = r + 2
 	return &r
 }
 
@@ -30,13 +33,13 @@ func MaxHeapify(A *[]int, i *int) {
 	r := Right(i)
 	largest := 0
 
-	if *l <= len(*A) && (*A)[*l] > (*A)[*i] {
+	if *l < len(*A) && (*A)[*l] > (*A)[*i] {
 		largest = *l
 	} else {
 		largest = *i
 	}
 
-	if *r <= len(*A)-1 && (*A)[*r] > (*A)[largest] {
+	if *r < len(*A) && (*A)[*r] > (*A)[largest] {
 		largest = *r
 	}
 
@@ -50,7 +53,7 @@ func MaxHeapify(A *[]int, i *int) {
 
 func BuildMaxHeap(A *[]int) {
 	A_floor := int(math.Floor(float64(len(*A)))/2.0)-1
-	for i := A_floor; i > 1; i-- {
+	for i := A_floor; i >= 0; i-- {
 		MaxHeapify(A, &i)
 	}
 }
@@ -78,12 +81,11 @@ func HeapIncreaseKey(A *[]int, i *int, key *int) error {
 	}
 
 	(*A)[j] = *key
-	for j > 0 && (*A)[Parent(j)] < (*A)[j] {
-		temp := (*A)[Parent(j)]
-		(*A)[Parent(j)] = (*A)[j]
-		(*A)[j] = temp
-
-		j = Parent(j)
+	for j > 0 && (*A)[*Parent(j)] < (*A)[j] {
+		// Swap indexes
+		// a, b = b, a
+		(*A)[*Parent(j)], (*A)[j] = (*A)[j], (*A)[*Parent(j)]
+		j = *Parent(j)
 	}
 	return nil
 }

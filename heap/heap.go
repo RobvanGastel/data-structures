@@ -42,9 +42,9 @@ func MaxHeapify(A []int, i *int) {
 	}
 
 	if largest != *i {
-		temp := A[largest]
-		A[largest] = A[*i]
-		A[*i] = temp
+		// Swap indexes
+		// a, b = b, a
+		A[largest], A[*i] = A[*i], A[largest]
 		MaxHeapify(A, &largest)
 	}
 }
@@ -61,34 +61,32 @@ func HeapExtractMax(A []int) (int, error) {
 		return 0, errors.New("heap underflow")
 	}
 
-	max := A[1]
-	i := 1
+	max := A[0]
+	i := 0
 	MaxHeapify(A, &i)
 	return max, nil
 }
 
 func HeapIncreaseKey(A []int, i *int, key *int) error {
-	j := *i-1
-	if *key < A[j] {
+	j := *i
+	if *key < A[j-1] {
 		return errors.New("new key is smaller than current key")
 	}
 
 	A[j] = *key
-	for j > 1 && A[Parent(j)] < A[j] {
+	for j > 0 && A[Parent(j)] < A[j] {
 		temp := A[Parent(j)]
 		A[Parent(j)] = A[j]
 		A[j] = temp
 
 		j = Parent(j)
 	}
-
 	fmt.Println(A)
-
 	return nil
 }
 
 func MaxHeapInsert(A []int, key *int) error {
 	A = append(A, -2147483648)
-	n := len(A)
+	n := len(A)-1 // Index starts at one
 	return HeapIncreaseKey(A, &n, key)
 }

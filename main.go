@@ -8,12 +8,18 @@ import (
 func main() {
 	A := []int{30, 20, 15, 10, 5, 3, 25}
 
-	BuildMaxHeap(A) // Build inplace
-
-	val := 10000
-	_ = MaxHeapInsert(A, &val)
+	BuildMaxHeap(&A) // Build inplace
 	fmt.Println(A)
 
-	i, _ := HeapExtractMax(A)
+	val := 10000
+	_ = MaxHeapInsert(&A, &val)
+	fmt.Println(A)
+
+	i, _ := HeapExtractMax(&A)
 	fmt.Println(i)
+
+	fmt.Println(A)
+	i, _ = HeapExtractMax(&A)
+	fmt.Println(i)
+	fmt.Println(A)
 }

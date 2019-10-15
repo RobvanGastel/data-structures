@@ -36,10 +36,10 @@ func TestCheckMaxHeap(t *testing.T) {
 	BuildMaxHeap(&A) // Build inplace
 
 	validHeap := true
-	prevMax, _ := HeapExtractMax(&A)
+	prevMax, _ := ExtractMaximum(&A)
 	n := len(A)
 	for j := 0; j < n; j++ {
-		max, _ := HeapExtractMax(&A)
+		max, _ := ExtractMaximum(&A)
 
 		if prevMax < max {
 			validHeap = false

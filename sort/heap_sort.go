@@ -1,20 +1,32 @@
 package sort
 
 import (
-	. "data-structures/heap"
+	heap "data-structures/heap"
 )
 
-// TODO: Add asc or desc,
-// TODO: Define a heap-size nessecary
-// to keep order in rest of array
-func HeapSort(A *[]int) {
-	BuildMaxHeap(A)
+// HeapSort sorts an array asc or desc by using a heap
+func HeapSort(A *[]int, order string) {
 
-	for i := len(*A) - 1; i > 1; i-- {
+	if order == "asc" {
+		h := heap.BuildMinHeap(A)
+
+		for i := len(*A) - 1; i > 0; i-- {
+			(*A)[i], (*A)[0] = (*A)[0], (*A)[i]
+
+			h.HeapSize--
+			j := 0
+			h.MinHeapify(&j)
+		}
+		return
+	}
+	// Else default use "desc"
+	h := heap.BuildMaxHeap(A)
+
+	for i := len(*A) - 1; i > 0; i-- {
 		(*A)[i], (*A)[0] = (*A)[0], (*A)[i]
 
-		// heap-size[ A] ← heap-size[ A] − 1
+		h.HeapSize--
 		j := 0
-		MaxHeapify(A, &j)
+		h.MaxHeapify(&j)
 	}
 }

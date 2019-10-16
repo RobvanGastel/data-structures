@@ -1,45 +1,35 @@
 package heap
 
 import (
+	test "data-structures/test"
 	"math/rand"
-	"reflect"
 	"testing"
 )
 
-// TODO: Create generic method, Checks if values are equal
-func assertEqual(t *testing.T, a interface{}, b interface{}) {
-	if a == b {
-		return
-	}
-
-	t.Errorf("Received %v (type %v), expected %v (type %v)", a, reflect.TypeOf(a), b, reflect.TypeOf(b))
-}
-
-// TODO: Improve benchmark
 func BenchmarkInsert(*testing.B) {
-	A := make([]int, 0)
 	// Fill max heap
+	A := make([]int, 0)
 	for i := 0; i < 1000; i++ {
 		A = append(A, rand.Intn(30))
 	}
 
-	BuildMaxHeap(&A) // Build inplace
+	_ = BuildMaxHeap(&A)
 }
 
-// Valid date if it builds a valid Max Heap
+// // Valid date if it builds a valid Max Heap
 func TestCheckMaxHeap(t *testing.T) {
 	A := make([]int, 0)
 	for i := 0; i < 1000; i++ {
 		randm := rand.Intn(1000)
 		A = append(A, randm)
 	}
-	BuildMaxHeap(&A) // Build inplace
+	h := BuildMaxHeap(&A)
 
 	validHeap := true
-	prevMax, _ := ExtractMaximum(&A)
+	prevMax, _ := h.ExtractMaximum()
 	n := len(A)
 	for j := 0; j < n; j++ {
-		max, _ := ExtractMaximum(&A)
+		max, _ := h.ExtractMaximum()
 
 		if prevMax < max {
 			validHeap = false
@@ -47,11 +37,7 @@ func TestCheckMaxHeap(t *testing.T) {
 		}
 	}
 
-	assertEqual(t, true, validHeap)
-}
-
-func TestCheckIncreaseKeyEmptyHeap(t *testing.T) {
-	// TODO
+	test.AssertEqual(t, true, validHeap)
 }
 
 func TestCheckIncreaseKey(t *testing.T) {
@@ -60,9 +46,9 @@ func TestCheckIncreaseKey(t *testing.T) {
 		randm := rand.Intn(1000)
 		A = append(A, randm)
 	}
-	BuildMaxHeap(&A) // Build inplace
+	h := BuildMaxHeap(&A) // Build inplace
 
 	val := 10000
-	errorOrNil := MaxHeapInsert(&A, &val)
-	assertEqual(t, nil, errorOrNil)
+	errorOrNil := h.MaxHeapInsert(&val)
+	test.AssertEqual(t, nil, errorOrNil)
 }

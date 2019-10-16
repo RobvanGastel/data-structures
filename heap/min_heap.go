@@ -5,80 +5,87 @@ import (
 	"math"
 )
 
+// Uses main class heap.go, for generic struct Heap
+
+// BuildMinHeap in place orders the array as a heap
+func BuildMinHeap(A *[]int) Heap {
+	size := len(*A) - 1
+	H := Heap{A: *A, HeapSize: size}
+
+	AFloor := int(math.Floor(float64(len(*A)))/2.0) - 1
+	for i := AFloor; i >= 0; i-- {
+		H.MinHeapify(&i)
+	}
+	return H
+}
+
 // Minimum returns minimum node in Heap
-func Minimum(A *[]int) *int {
-	return &(*A)[0]
+func (H *Heap) Minimum() *int {
+	return &H.A[0]
 }
 
 // MinHeapify restores Heap order from index i
-func MinHeapify(A *[]int, i *int) {
-	l := Left(i)
-	r := Right(i)
+func (H *Heap) MinHeapify(i *int) {
+	l := *H.Left(i)
+	r := *H.Right(i)
 	smallest := 0
 
-	if *l < len(*A) && (*A)[*l] < (*A)[*i] {
-		smallest = *l
+	if l < H.HeapSize && H.A[l] < H.A[*i] {
+		smallest = l
 	} else {
 		smallest = *i
 	}
 
-	if *r < len(*A) && (*A)[*r] < (*A)[smallest] {
-		smallest = *r
+	if r < H.HeapSize && H.A[r] < H.A[smallest] {
+		smallest = r
 	}
 
 	if smallest != *i {
 		// Swap indexes
 		// a, b = b, a
-		(*A)[smallest], (*A)[*i] = (*A)[*i], (*A)[smallest]
-		MinHeapify(A, &smallest)
-	}
-}
-
-// BuildMinHeap in place orders the array as a heap
-func BuildMinHeap(A *[]int) {
-	AFloor := int(math.Floor(float64(len(*A)))/2.0) - 1
-	for i := AFloor; i >= 0; i-- {
-		MinHeapify(A, &i)
+		H.A[smallest], H.A[*i] = H.A[*i], H.A[smallest]
+		H.MinHeapify(&smallest)
 	}
 }
 
 // ExtractMinimum extracts the minimum node of a heap
-func ExtractMinimum(A *[]int) (int, error) {
-	if len(*A) < 1 {
+func (H *Heap) ExtractMinimum() (int, error) {
+	if H.HeapSize < 1 {
 		return 0, errors.New("heap underflow")
 	}
-	min := (*A)[0]
+	min := H.A[0]
 	i := 0
 
 	// Set first item to last item
-	(*A)[i] = (*A)[len(*A)-1]
+	H.A[i] = H.A[H.HeapSize]
+	H.HeapSize = H.HeapSize - 1
 
 	// Remove last index
-	(*A) = (*A)[:len(*A)-1]
-	MinHeapify(A, &i)
+	H.A = H.A[:H.HeapSize-1]
+	H.MinHeapify(&i)
 	return min, nil
 }
 
-// IncreaseKey restores order after adding a key
-func IncreaseMinKey(A *[]int, i *int, key *int) error {
-	j := *i
-	if *key > (*A)[j-1] {
-		return errors.New("new key is bigger than current key")
+// IncreaseMinKey restores order after adding a key
+func (H *Heap) IncreaseMinKey(key *int) error {
+	j := H.HeapSize
+	if *key > H.A[j] {
+		return errors.New("new key is smaller than current key")
 	}
 
-	(*A)[j] = *key
-	for j > 0 && (*A)[*Parent(j)] > (*A)[j] {
+	H.A[j] = *key
+	for j > 0 && H.A[*H.Parent(j)] > H.A[j] {
 		// Swap indexes
 		// a, b = b, a
-		(*A)[*Parent(j)], (*A)[j] = (*A)[j], (*A)[*Parent(j)]
-		j = *Parent(j)
+		H.A[*H.Parent(j)], H.A[j] = H.A[j], H.A[*H.Parent(j)]
+		j = *H.Parent(j)
 	}
 	return nil
 }
 
 // MinHeapInsert inserts a key in the heap and maintains order
-func MinHeapInsert(A *[]int, key *int) error {
-	*A = append((*A), 2147483648)
-	n := len(*A) - 1 // Index starts at one
-	return IncreaseMinKey(A, &n, key)
+func (H *Heap) MinHeapInsert(A *[]int, key *int) error {
+	H.HeapSize = H.HeapSize + 1
+	H.A = append((H.A), 2147483648)
+	return H.IncreaseMinKey(key)
 }

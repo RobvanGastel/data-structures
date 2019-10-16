@@ -1,6 +1,7 @@
 package heap
 
 import (
+	test "data-structures/test"
 	"math/rand"
 	"testing"
 )
@@ -12,13 +13,13 @@ func TestCheckMinHeap(t *testing.T) {
 		randm := rand.Intn(1000)
 		A = append(A, randm)
 	}
-	BuildMinHeap(&A) // Build inplace
+	h := BuildMinHeap(&A) // Build inplace
 
 	validHeap := true
-	prevMin, _ := ExtractMinimum(&A)
+	prevMin, _ := h.ExtractMinimum()
 	n := len(A)
 	for j := 0; j < n; j++ {
-		min, _ := ExtractMinimum(&A)
+		min, _ := h.ExtractMinimum()
 
 		if prevMin > min {
 			validHeap = false
@@ -26,18 +27,5 @@ func TestCheckMinHeap(t *testing.T) {
 		}
 	}
 
-	assertEqual(t, true, validHeap)
-}
-
-func TestCheckIncreaseMinKey(t *testing.T) {
-	A := make([]int, 0)
-	for i := 0; i < 1000; i++ {
-		randm := rand.Intn(1000)
-		A = append(A, randm)
-	}
-	BuildMinHeap(&A) // Build inplace
-
-	val := -10
-	errorOrNil := MinHeapInsert(&A, &val)
-	assertEqual(t, nil, errorOrNil)
+	test.AssertEqual(t, true, validHeap)
 }

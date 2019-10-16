@@ -5,80 +5,87 @@ import (
 	"math"
 )
 
+// Uses main class heap.go, for generic struct Heap
+
+// BuildMaxHeap in place orders the array as a heap
+func BuildMaxHeap(A *[]int) Heap {
+	size := len(*A) - 1
+	H := Heap{A: *A, HeapSize: size}
+
+	AFloor := int(math.Floor(float64(len(*A)))/2.0) - 1
+	for i := AFloor; i >= 0; i-- {
+		H.MaxHeapify(&i)
+	}
+	return H
+}
+
 // Maximum returns maximum node in Heap
-func Maximum(A *[]int) *int {
-	return &(*A)[0]
+func (H *Heap) Maximum() *int {
+	return &H.A[0]
 }
 
 // MaxHeapify restores Heap order from index i
-func MaxHeapify(A *[]int, i *int) {
-	l := Left(i)
-	r := Right(i)
+func (H *Heap) MaxHeapify(i *int) {
+	l := *H.Left(i)
+	r := *H.Right(i)
 	largest := 0
 
-	if *l < len(*A) && (*A)[*l] > (*A)[*i] {
-		largest = *l
+	if l < H.HeapSize && H.A[l] > H.A[*i] {
+		largest = l
 	} else {
 		largest = *i
 	}
 
-	if *r < len(*A) && (*A)[*r] > (*A)[largest] {
-		largest = *r
+	if r < H.HeapSize && H.A[r] > H.A[largest] {
+		largest = r
 	}
 
 	if largest != *i {
 		// Swap indexes
 		// a, b = b, a
-		(*A)[largest], (*A)[*i] = (*A)[*i], (*A)[largest]
-		MaxHeapify(A, &largest)
-	}
-}
-
-// BuildMaxHeap in place orders the array as a heap
-func BuildMaxHeap(A *[]int) {
-	AFloor := int(math.Floor(float64(len(*A)))/2.0) - 1
-	for i := AFloor; i >= 0; i-- {
-		MaxHeapify(A, &i)
+		H.A[largest], H.A[*i] = H.A[*i], H.A[largest]
+		H.MaxHeapify(&largest)
 	}
 }
 
 // ExtractMaximum extracts the maximum node of a heap
-func ExtractMaximum(A *[]int) (int, error) {
-	if len(*A) < 1 {
+func (H *Heap) ExtractMaximum() (int, error) {
+	if H.HeapSize < 1 {
 		return 0, errors.New("heap underflow")
 	}
-	max := (*A)[0]
+	max := H.A[0]
 	i := 0
 
 	// Set first item to last item
-	(*A)[i] = (*A)[len(*A)-1]
+	H.A[i] = H.A[H.HeapSize]
+	H.HeapSize = H.HeapSize - 1
 
 	// Remove last index
-	(*A) = (*A)[:len(*A)-1]
-	MaxHeapify(A, &i)
+	H.A = H.A[:H.HeapSize-1]
+	H.MaxHeapify(&i)
 	return max, nil
 }
 
-// IncreaseKey restores order after adding a key
-func IncreaseKey(A *[]int, i *int, key *int) error {
-	j := *i
-	if *key < (*A)[j-1] {
+// IncreaseMaxKey restores order after adding a key
+func (H *Heap) IncreaseMaxKey(key *int) error {
+	j := H.HeapSize
+	if *key < H.A[j] {
 		return errors.New("new key is smaller than current key")
 	}
 
-	(*A)[j] = *key
-	for j > 0 && (*A)[*Parent(j)] < (*A)[j] {
+	H.A[j] = *key
+	for j > 0 && H.A[*H.Parent(j)] < H.A[j] {
 		// Swap indexes
 		// a, b = b, a
-		(*A)[*Parent(j)], (*A)[j] = (*A)[j], (*A)[*Parent(j)]
-		j = *Parent(j)
+		H.A[*H.Parent(j)], H.A[j] = H.A[j], H.A[*H.Parent(j)]
+		j = *H.Parent(j)
 	}
 	return nil
 }
 
 // MaxHeapInsert inserts a key in the heap and maintains order
-func MaxHeapInsert(A *[]int, key *int) error {
-	*A = append((*A), -2147483648)
-	n := len(*A) - 1 // Index starts at one
-	return IncreaseKey(A, &n, key)
+func (H *Heap) MaxHeapInsert(key *int) error {
+	H.HeapSize = H.HeapSize + 1
+	H.A = append((H.A), -2147483648)
+	return H.IncreaseMaxKey(key)
 }

@@ -1,28 +1,51 @@
 package graph
 
-// Directed and Undirected Graph
-// Adjacency Matrix / Adjacency List
-
+// Graph ...
 type Graph struct {
-	nodes []*Node
+	Nodes []*Node
+	Edges []*Edge
 }
 
-type Node struct {
-	edges []*Edge
-	Index int
-	Value int
-}
-
+// Edge ...
 type Edge struct {
+	Parent *Node
+	Child  *Node
 	Weight int
-	Start Node
-	End Node
 }
 
-func (G *Graph) MakeEdge(from, to Node) {
-
+// Node ...
+type Node struct {
+	Name string
 }
 
-func (G *Graph) MakeNode() {
+// AddEdge ...
+func (G *Graph) AddEdge(parent, child *Node, weight int) {
+	edge := &Edge{
+		Parent: parent,
+		Child:  child,
+		Weight: weight,
+	}
 
+	G.Edges = append(G.Edges, edge)
+	G.AddNode(parent)
+	G.AddNode(child)
+}
+
+// AddNode ...
+func (G *Graph) AddNode(node *Node) {
+	var isPresent bool
+	for _, n := range G.Nodes {
+		if n == node {
+			isPresent = true
+		}
+	}
+
+	if !isPresent {
+		G.Nodes = append(G.Nodes, node)
+	}
+}
+
+// ToString ...
+func (G *Graph) ToString() {
+	// TODO
 }

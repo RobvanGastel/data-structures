@@ -1,20 +1,22 @@
 package rbt
 
-import "fmt"
-
-// TODO: Implement all dynamic set operations
+// TODO: Implement all dynamic set operations tests
 
 const (
+	// RED color node constant
 	RED = 0
+	// BLACK color node constant
 	BLACK = 1
 )
 
+// Node of the tree.
 type Node struct {
 	Left, Right, Parent *Node
-	Color int
-	Key int
+	Color               int
+	Key                 int
 }
 
+// Tree only storing the root node.
 type Tree struct {
 	Root *Node
 }
@@ -23,7 +25,7 @@ type Tree struct {
 func (T *Tree) InsertNode(z *Node) {
 	var y *Node
 	var x = T.Root
-	
+
 	if x == nil {
 		z.Color = BLACK
 		T.Root = z
@@ -47,12 +49,3 @@ func (T *Tree) InsertNode(z *Node) {
 		y.Right = z
 	}
 }
-
-func InOrderTreeWalk(x *Node) {
-	if x != nil {
-		InOrderTreeWalk(x.Left)
-		fmt.Println(x.Key)
-		InOrderTreeWalk(x.Right)
-	}
-}
-

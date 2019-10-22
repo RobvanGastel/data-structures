@@ -2,22 +2,25 @@ package bst
 
 import "fmt"
 
-// The dynamic-set operations Search, Minimum, Maximum, Successor and 
+// The dynamic-set operations Search, Minimum, Maximum, Successor and
 // Predecessor runs in O(h), height h.
 
+// Node of the tree.
 type Node struct {
 	Left, Right, Parent *Node
-	Key int
+	Key                 int
 }
 
+// Tree only storing the root node.
 type Tree struct {
 	Root *Node
 }
 
+// InsertNode into the Tree.
 func (T *Tree) InsertNode(z *Node) {
 	var y *Node
 	var x = T.Root
-	
+
 	for x != nil {
 		y = x
 		if z.Key < x.Key {
@@ -36,12 +39,13 @@ func (T *Tree) InsertNode(z *Node) {
 	}
 }
 
-func (T *Tree) DeleteNode (z *Node) {
+// DeleteNode from the Tree.
+func (T *Tree) DeleteNode(z *Node) {
 	if z.Left == nil {
 		T.Transplant(z, z.Right)
 	} else if z.Right == nil {
 		T.Transplant(z, z.Left)
-	} else { 
+	} else {
 		var y = T.Minimum(z.Right)
 		if y.Parent != z {
 			T.Transplant(y, y.Right)
@@ -54,6 +58,8 @@ func (T *Tree) DeleteNode (z *Node) {
 	}
 }
 
+// Transplant rotate on certain nodes, to
+// reduce height.
 func (T *Tree) Transplant(u, v *Node) {
 	if u.Parent == nil {
 		T.Root = v
@@ -68,6 +74,7 @@ func (T *Tree) Transplant(u, v *Node) {
 	}
 }
 
+// Successor retrieves sucessor of given Node.
 func (T *Tree) Successor(x *Node) *Node {
 	if x.Right != nil {
 		return T.Minimum(x.Right)
@@ -81,6 +88,8 @@ func (T *Tree) Successor(x *Node) *Node {
 	return y
 }
 
+// Predecessor retrieves predecessor of given
+// Node.
 func (T *Tree) Predecessor(x *Node) *Node {
 	if x.Left != nil {
 		return T.Maximum(x.Left)
@@ -94,6 +103,8 @@ func (T *Tree) Predecessor(x *Node) *Node {
 	return y
 }
 
+// Minimum receives the minimum Node in the
+// Tree.
 func (T *Tree) Minimum(x *Node) *Node {
 	for x.Left != nil {
 		x = x.Left
@@ -101,6 +112,8 @@ func (T *Tree) Minimum(x *Node) *Node {
 	return x
 }
 
+// Maximum receives the maximum Node in the
+// Tree.
 func (T *Tree) Maximum(x *Node) *Node {
 	for x.Right != nil {
 		x = x.Right
@@ -108,16 +121,23 @@ func (T *Tree) Maximum(x *Node) *Node {
 	return x
 }
 
-func TreeSearch(x *Node, k int) *Node {
+// Search the binary search Tree for given
+// value.
+func (T *Tree) Search(k int) *Node {
+	return search(T.Root, k)
+}
+
+func search(x *Node, k int) *Node {
 	if x == nil || k == x.Key {
 		return x
 	}
 	if k < x.Key {
-		return TreeSearch(x.Left, k)
-	} else {
-		return TreeSearch(x.Right, k)
+		return search(x.Left, k)
 	}
+	return search(x.Right, k)
 }
+
+// TODO: Refactor tree walks
 
 func InOrderTreeWalk(x *Node) {
 	if x != nil {

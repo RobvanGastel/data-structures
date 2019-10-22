@@ -86,6 +86,6 @@ func (H *Heap) IncreaseMaxKey(key *int) error {
 // MaxHeapInsert inserts a key in the heap and maintains order
 func (H *Heap) MaxHeapInsert(key *int) error {
 	H.HeapSize = H.HeapSize + 1
-	H.A = append((H.A), -2147483648)
+	H.A = append((H.A), -int(^uint(0)>>1)) // -"Infinity"
 	return H.IncreaseMaxKey(key)
 }

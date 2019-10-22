@@ -2,28 +2,35 @@ package main
 
 import (
 	"fmt"
-	"math/rand"
 
-	// . "./heap"
-	. "./sort"
+	. "./graph"
 )
 
 func main() {
-	A := make([]int, 0)
-	for i := 0; i < 10; i++ {
-		randm := rand.Intn(10000)
-		A = append(A, randm)
-	}
-	fmt.Println(A)
-	HeapSort(&A, "asc") // Build inplace
-	fmt.Println(A)
+	a := &Node{Name: "a"}
+	b := &Node{Name: "b"}
+	c := &Node{Name: "c"}
+	d := &Node{Name: "d"}
+	e := &Node{Name: "e"}
+	f := &Node{Name: "f"}
+	g := &Node{Name: "g"}
 
-	// Fill max heap
-	// A := make([]int, 0)
-	// for i := 0; i < 1000; i++ {
-	// 	A = append(A, rand.Intn(30))
-	// }
-	// fmt.Println(A)
-	// heap := BuildMaxHeap(&A)
-	// fmt.Println(A)
+	graph := Graph{}
+	graph.AddEdge(a, c, 2)
+	graph.AddEdge(a, b, 5)
+	graph.AddEdge(c, b, 1)
+	graph.AddEdge(c, d, 9)
+	graph.AddEdge(b, d, 4)
+	graph.AddEdge(d, e, 2)
+	graph.AddEdge(d, g, 30)
+	graph.AddEdge(d, f, 10)
+	graph.AddEdge(f, g, 1)
+
+	fmt.Println(graph.ToString())
+	table := Dijkstra(&graph, a)
+
+	for node, weight := range table {
+		fmt.Printf("Distance from %s to %s = %d\n", a.Name, node.Name, weight)
+	}
+
 }

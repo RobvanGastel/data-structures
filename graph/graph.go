@@ -4,7 +4,7 @@ import "strconv"
 
 // Graph directed graph struct
 type Graph struct {
-	Nodes []*Node
+	Nodes map[*Node]bool
 	Edges []*Edge
 }
 
@@ -36,15 +36,13 @@ func (G *Graph) AddEdge(parent, child *Node, weight int) {
 
 // AddNode to the graph.
 func (G *Graph) AddNode(node *Node) {
-	var isPresent bool
-	for _, n := range G.Nodes {
-		if n == node {
-			isPresent = true
-		}
+	if G.Nodes == nil {
+		G.Nodes = make(map[*Node]bool)
 	}
 
+	_, isPresent := G.Nodes[node]
 	if !isPresent {
-		G.Nodes = append(G.Nodes, node)
+		G.Nodes[node] = true
 	}
 }
 
@@ -68,14 +66,14 @@ func (G *Graph) ToString() string {
 
 	s += "Edges:\n"
 	for _, edge := range G.Edges {
-		s += edge.Parent.Name + " -> " + edge.Child.Name + " = " + strconv.Itoa(edge.Cost)
+		s += edge.Parent.Name + " -> " + edge.Child.Name + " = " + strconv.Itoa(edge.Weight)
 		s += "\n"
 	}
 	s += "\n"
 
 	s += "Nodes: "
 	i := 0
-	for node, _ := range G.Nodes {
+	for node := range G.Nodes {
 		if i == len(G.Nodes)-1 {
 			s += node.Name
 		} else {

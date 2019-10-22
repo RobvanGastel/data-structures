@@ -11,7 +11,7 @@ import "sort"
 // for each vertex v ∈ Adj[u] do RELAX(u,v,w)
 
 // Dijkstra shortest path algorithm for Graph g and start node s.
-func Dijkstra(G *Graph, s *Node) {
+func Dijkstra(G *Graph, s *Node) map[*Node]int {
 
 	source := InitializeSingleSource(G, s)
 	var visited []*Node
@@ -31,6 +31,8 @@ func Dijkstra(G *Graph, s *Node) {
 			}
 		}
 	}
+
+	return source
 }
 
 // InitializeSingleSource needs a graph with a start Node that needs
@@ -39,7 +41,7 @@ func InitializeSingleSource(G *Graph, s *Node) map[*Node]int {
 	table := make(map[*Node]int)
 	table[s] = 0
 
-	for _, node := range G.Nodes {
+	for node := range G.Nodes {
 		if node != s {
 			table[node] = int(^uint(0) >> 1)
 		}

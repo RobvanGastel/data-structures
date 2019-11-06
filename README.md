@@ -1,6 +1,7 @@
 # data-structures
+Implementation of simpel data structures in Go.
 
-Run/install
+To install
 ```bash
 $ go install data-structures
 $ go run data-structures
